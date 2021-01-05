@@ -67,6 +67,19 @@ export default {
             if (!valid) {
                 return;
             }
+
+            fetch("https://mood-app-storage-default-rtdb.firebaseio.com/users.json", {
+                method: "POST",
+                header: {
+                    "Content-Type": "Application/json",
+                },
+                body: JSON.stringify({
+                    userName: this.account.name,
+                    password: this.account.password,
+                    gmail: this.account.gmail,
+                    activities: [],
+                }),
+            });
             
             this.$router.push("/home");
 
