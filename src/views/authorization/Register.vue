@@ -1,6 +1,6 @@
 
 <template>
-    <h2>Registrer en ny bruger</h2>
+    <h2>Opret en ny bruger</h2>
     <form @submit.prevent="submitAccount">
         <BaseInput label="Bruger navn:"
                    name="name"

@@ -16,12 +16,21 @@ export default {
   },
   data() {
     return {
-      user: {
-        loggedIn: false,
-
-      }
+      user: null
     };
   },
+  methods: {
+    logInUser(user) {
+      console.log(user);
+      this.user = user;
+    }
+  },
+  provide() {
+    return {
+      user: this.user,
+      logInUser: this.logInUser,
+    };
+  }
 }
 </script>
 
