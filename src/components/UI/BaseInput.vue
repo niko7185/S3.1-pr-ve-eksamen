@@ -1,0 +1,85 @@
+
+<template>
+    <label for="input">{{ label }}</label>
+    <p class="error">{{ errorLabel }}</p>
+    <base-wrapper>
+        <input :type="inputType" :placeholder="placeholderText" :class="isError" :id="name" v-model.trim="value" />
+    </base-wrapper>
+</template>
+
+<script>
+import BaseWrapper from './BaseWrapper.vue'
+
+export default {
+    components: {
+        BaseWrapper,
+    },
+    props: {
+        label: {
+            type: String,
+            default: "Input text below"
+        },
+        name: {
+            type: String,
+            required: true,
+        },
+        errorLabel: {
+            type: String,
+            required: false,
+        },
+        placeholderText: {
+            type: String,
+            default: "Input text here"
+        },
+        inputType: {
+            type: String,
+            default: "text"
+        },
+    },
+    emits: [
+        "input-changed",
+    ],
+    data() {
+        return {
+            value: null,
+        };
+    },
+    computed: {
+        isError() {
+            return {
+                error: this.errorLabel,
+            };
+        }
+    },
+    watch: {
+        value(value) {
+            this.$emit("input-changed", value, this.name);
+        }
+    }
+
+}
+</script>
+
+<style scoped>
+    input {
+        background: none;
+        width: 100%;
+        border: none;
+        padding: 10px 5px;
+    }
+
+    label {
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    p.error {
+        color: red;
+        margin: 0.5em 0;
+    }
+
+    input.error {
+        box-shadow: 0 0 5px 0 red;
+    }
+
+</style>

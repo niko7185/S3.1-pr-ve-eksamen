@@ -2,8 +2,9 @@
   <header>
     <TheNav/>
   </header>
-
-  <router-view></router-view>
+  <main>
+    <router-view></router-view>
+  </main>
 </template>
 
 <script>
@@ -37,6 +38,12 @@ body {
 
 header {
   background-color: darkgreen;
+  margin-bottom: 1rem;
+}
+
+main {
+  max-width: 60%;
+  margin: auto;
 }
 
 </style>
