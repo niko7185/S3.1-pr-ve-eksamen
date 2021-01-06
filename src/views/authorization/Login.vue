@@ -55,11 +55,13 @@ export default {
                         const users = [];
 
                         for (const id in data) {
+                            const userActivities = !data[id].activities ? [] : data[id].activities;
                             users.push({
+                                id,
                                 name: data[id].userName,
                                 password: data[id].password,
                                 gmail: data[id].gmail,
-                                activities: data[id].activities,
+                                activities: userActivities,
                             });
                         }
 

@@ -32,6 +32,7 @@ export default {
         BaseInput,
         GreenButton,
     },
+    inject: ["logInUser"],
     data() {
         return {
             account: {
@@ -68,19 +69,23 @@ export default {
                 return;
             }
 
+            const newUser = JSON.stringify({
+                    userName: this.account.name,
+                    password: this.account.password,
+                    gmail: this.account.gmail,
+                    activities: [],
+                });
+
             fetch("https://mood-app-storage-default-rtdb.firebaseio.com/users.json", {
                 method: "POST",
                 header: {
                     "Content-Type": "Application/json",
                 },
-                body: JSON.stringify({
-                    userName: this.account.name,
-                    password: this.account.password,
-                    gmail: this.account.gmail,
-                    activities: [],
-                }),
+                body: newUser,
             });
             
+            localStorage.setItem("user", JSON.stringify(newUser));
+            this.logInUser(newUser);
             this.$router.push("/home");
 
         },

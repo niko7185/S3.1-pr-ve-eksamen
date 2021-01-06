@@ -1,6 +1,6 @@
 <template>
   <header>
-    <TheNav/>
+    <TheNav :user="user"/>
   </header>
   <main>
     <router-view></router-view>
@@ -21,16 +21,19 @@ export default {
   },
   methods: {
     logInUser(user) {
-      console.log(user);
+      localStorage.setItem("user", JSON.stringify(user));
       this.user = user;
     }
   },
   provide() {
     return {
-      user: this.user,
       logInUser: this.logInUser,
     };
-  }
+  },
+  created() {
+    this.user = localStorage.getItem('user');
+    
+  },
 }
 </script>
 

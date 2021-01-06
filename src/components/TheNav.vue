@@ -1,11 +1,30 @@
 
 <template>
-    <nav>
+    <nav v-if="!user">
       <router-link to="/home">Home</router-link>
       <router-link to="/login">Log In</router-link>
       <router-link to="/register">Register</router-link>
     </nav>
+    <nav v-else>
+      <span>{{ user.name }}</span>
+      <router-link to="/home">Home</router-link>
+      <a @click="logOut">Log Out</a>
+    </nav>
 </template>
+
+<script>
+export default {
+    props: ["user"],
+    inject: ["logInUser"],
+    methods: {
+        logOut() {
+            this.logInUser(null);
+            localStorage.removeItem("user");
+            this.$router.push("/home?update=true");
+        }
+    }
+}
+</script>
 
 <style scoped>
     nav {
@@ -15,11 +34,18 @@
         text-align: center;
     }
 
+    span {
+        color: white;
+        font-weight: bold;
+        margin-right: 1em;
+    }
+
     a {
         color: white;
         padding: 0.5rem 1rem;
         text-decoration: none;
         display: inline-block;
+        cursor: pointer;
     }
 
     a:hover {
