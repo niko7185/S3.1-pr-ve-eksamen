@@ -3,9 +3,12 @@
     <label for="input">{{ label }}</label>
     <p class="error">{{ errorLabel }}</p>
     <base-wrapper>
-        <textarea :name="name" :id="name" rows="10" v-if="inputType === 'textarea'" style="width: 100%"
-                     :placeholder="placeholderText" :class="isError" v-model.trim="value"></textarea>
-        <input :type="inputType" :placeholder="placeholderText" :class="isError" :id="name" v-model.trim="value" v-else />
+        <textarea :name="name" :id="name" rows="10" v-if="inputType === 'textarea'" style="width: 100%" 
+                    :placeholder="placeholderText" :class="isError" 
+                    v-model.trim="value"></textarea>
+
+        <input :type="inputType" :placeholder="placeholderText" 
+                :class="isError" :id="name" v-model.trim="value" v-else />
     </base-wrapper>
 </template>
 
@@ -24,6 +27,9 @@ export default {
         name: {
             type: String,
             required: true,
+        },
+        baseValue: {
+            required: false,
         },
         errorLabel: {
             type: String,
@@ -56,6 +62,11 @@ export default {
     watch: {
         value(value) {
             this.$emit("input-changed", value, this.name);
+        }
+    },
+    created() {
+        if (this.baseValue) {
+            this.value = this.baseValue;
         }
     }
 
