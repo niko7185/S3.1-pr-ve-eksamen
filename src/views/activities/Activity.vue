@@ -113,9 +113,12 @@ export default {
     },
     created() {
         this.user = JSON.parse(localStorage.getItem("user"));
+        
+        const activityId = parseInt(this.$route.query.activityId);
 
-        if (this.$route.query.activityId) {
-            this.activity = this.user.activities.Find(a => a.id === this.$route.query.activityId);
+        if (activityId) {
+            
+            this.activity = this.user.activities.find(a =>  a.id === activityId);
         }
     }
 }
