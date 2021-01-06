@@ -3,7 +3,9 @@
     <label for="input">{{ label }}</label>
     <p class="error">{{ errorLabel }}</p>
     <base-wrapper>
-        <input :type="inputType" :placeholder="placeholderText" :class="isError" :id="name" v-model.trim="value" />
+        <textarea :name="name" :id="name" rows="10" v-if="inputType === 'textarea'" style="width: 100%"
+                     :placeholder="placeholderText" :class="isError" v-model.trim="value"></textarea>
+        <input :type="inputType" :placeholder="placeholderText" :class="isError" :id="name" v-model.trim="value" v-else />
     </base-wrapper>
 </template>
 
@@ -61,11 +63,22 @@ export default {
 </script>
 
 <style scoped>
+
+    section {
+        padding: 0px 5px;
+    }
+
     input {
         background: none;
         width: 100%;
         border: none;
         padding: 10px 5px;
+    }
+
+    textarea {
+        background: none;
+        border: none;
+        resize: vertical;
     }
 
     label {

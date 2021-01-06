@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/activities/Home.vue'
-import About from '../views/About.vue'
+import Activities from '../views/activities/Activities.vue'
+import AddActivity from '../views/activities/AddActivity.vue'
 import Login from '../views/authorization/Login.vue'
 import Register from '../views/authorization/Register.vue'
 
@@ -15,9 +16,17 @@ const routes = [
     component: Home,
   },
   {
-    path: '/about',
-    name: 'About',
-    component: About,
+    path: "/activities",
+    component: Activities,
+    beforeEnter(to, _, next) {
+      next(to.fullPath.slice("/activities".length, to.fullPath.length).length >= 2);
+    },
+    children: [
+      {
+        path: "add",
+        component: AddActivity,
+      }
+    ]
   },
   {
     path: '/login',

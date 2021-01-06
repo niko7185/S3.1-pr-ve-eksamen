@@ -21,9 +21,12 @@
     <div class="right">
       
       <round-button>
-        <svg class="plus">
-          <use xlink:href="#plusIcon" />
-        </svg>
+        <router-link to="/activities/add">
+          
+          <svg class="plus">
+            <use xlink:href="#plusIcon" />
+          </svg>
+        </router-link>
       </round-button>
     </div>
   </section>

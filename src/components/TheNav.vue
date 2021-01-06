@@ -8,6 +8,7 @@
     <nav v-else>
       <span>{{ user.name }}</span>
       <router-link to="/home">Home</router-link>
+      <router-link to="/activities/add">Aktiviteter</router-link>
       <a @click="logOut">Log Out</a>
     </nav>
 </template>
