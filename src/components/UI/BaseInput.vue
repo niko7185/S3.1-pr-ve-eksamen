@@ -102,7 +102,7 @@ export default {
         margin: 0.5em 0;
     }
 
-    input.error {
+    input.error, textarea.error {
         box-shadow: 0 0 5px 0 red;
     }
 

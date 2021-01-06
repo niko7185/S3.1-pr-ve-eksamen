@@ -7,7 +7,9 @@
                    :errorLabel="errorLabels[0]"
                    @input-changed="getInput"
                    placeholderText="Klarede opvasken 💪"/>
-
+                   
+        <EmojiInput :mood="activity.mood"
+                    @mood-change="getInput" />
 
         <BaseInput label="Beskrivelse"
                    name="description"
@@ -24,20 +26,23 @@
 <script>
 import GreenButton from '../../components/UI/GreenButton.vue';
 import BaseInput from '../../components/UI/BaseInput.vue';
+import EmojiInput from '../../components/UI/EmojiInput.vue';
 
 export default {
     components: {
         GreenButton,
         BaseInput,
+        EmojiInput,
     },
+    inject: ["logInUser"],
     data() {
         return {
-            errorLabels: ["", ""],
+            errorLabels: ["", "", ""],
             user: null,
             activity: {
                 title: "",
                 description: "",
-                mood: "",
+                mood: "ok",
             }
         };
     },
@@ -66,19 +71,25 @@ export default {
             this.activity.time = Date.now();
             
             if (this.activity.id) {
-                const index = this.user.activities.FindIndex(a => a.id === this.activity.id)
+                const index = this.user.activities.findIndex(a => a.id === this.activity.id)
                 this.user.activities[index] = this.activity;
             } else {
-                const highestId = this.user.activities.reduce((acc, value) => {
-                    return acc < value ? value : acc;
-                });
-                
-                this.activity.id = highestId + 1;
+                if (!this.user.activities.length) {
+                    
+                    this.activity.id = 1;
+                    
+                } else {
+                    const highest = this.user.activities.reduce((acc, value) => {
+                        return acc < value ? value : acc;
+                    });
+                    
+                    this.activity.id = highest.id + 1;
+                }
 
                 this.user.activities.push(this.activity);
             }
             
-            fetch("https://mood-app-storage-default-rtdb.firebaseio.com/users.json/" + this.user.id, {
+            fetch("https://mood-app-storage-default-rtdb.firebaseio.com/users/" + this.user.id + ".json", {
                             method: "PATCH",
                             header: {
                                 "Content-Type": "Application/json",
@@ -86,10 +97,14 @@ export default {
                             body: JSON.stringify({activities: this.user.activities}),
                         });
 
+            localStorage.setItem("user", JSON.stringify(this.user));
+            this.logInUser(this.user);    
+            this.$router.push("/home");
+
         },
         getInput(value, name) {
             this.activity[name] = value;
-        }
+        },
     },
     beforeRouteEnter(_, _2, next) {
         const user = localStorage.getItem("user");
@@ -97,10 +112,10 @@ export default {
         next(!!user);
     },
     created() {
-        this.user = localStorage.getItem("user");
+        this.user = JSON.parse(localStorage.getItem("user"));
 
-        if (this.$route.params.activityId) {
-            this.activity = this.user.activities.Find(a => a.id === this.$route.params.activityId);
+        if (this.$route.query.activityId) {
+            this.activity = this.user.activities.Find(a => a.id === this.$route.query.activityId);
         }
     }
 }

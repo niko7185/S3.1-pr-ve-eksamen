@@ -21,7 +21,7 @@
     <div class="right">
       
       <round-button>
-        <router-link to="/activities/add">
+        <router-link to="/activity">
           
           <svg class="plus">
             <use xlink:href="#plusIcon" />
@@ -46,14 +46,14 @@ export default {
     };
   },
   created() {
-    this.user = localStorage.getItem('user');
+    this.user = JSON.parse(localStorage.getItem('user'));
     
   },
   watch: {
     $route(value) {
       if (value.query.update) {
         
-        this.user = localStorage.getItem('user');
+        this.user = JSON.parse(localStorage.getItem('user'));
         this.$router.push("/home");
       }
     }

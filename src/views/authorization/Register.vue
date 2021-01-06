@@ -83,12 +83,30 @@ export default {
                 },
                 body: newUser,
             });
+
+            fetch("https://mood-app-storage-default-rtdb.firebaseio.com/users.json").then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+            }).then(data => {
+
+                const users = Object.keys(data);
+                const createdUser = data[users[users.length - 1]];
+                
+                createdUser.id = users[users.length - 1];
+
+                if (!createdUser.activities) {
+                    createdUser.activities = [];
+                }
+                
+                localStorage.setItem("user", JSON.stringify(createdUser));
+                this.logInUser(createdUser);
+                this.$router.push("/home");
+            });
             
-            localStorage.setItem("user", JSON.stringify(newUser));
-            this.logInUser(newUser);
-            this.$router.push("/home");
 
         },
+
         getInput(value, name) {
             this.account[name] = value;
         }

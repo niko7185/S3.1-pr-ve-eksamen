@@ -9,7 +9,9 @@
         </symbol>
     </svg>
     <ul class="feedback">
-        <li class="angry">
+        <li :class="{angry: true, active: mood === 'angry'}" 
+                @click="changeMood('angry')"
+                aria-label="Meget dårligt humør" >
             <div>
                 <svg class="eye left">
                     <use xlink:href="#eye"></use>
@@ -22,7 +24,9 @@
                 </svg>
             </div>
         </li>
-        <li class="sad">
+        <li :class="{sad: true, active: mood === 'sad'}" 
+            @click="changeMood('sad')"
+                aria-label="Dårligt humør" >
             <div>
                 <svg class="eye left">
                     <use xlink:href="#eye"></use>
@@ -35,10 +39,14 @@
                 </svg>
             </div>
         </li>
-        <li class="ok">
+        <li :class="{ok: true, active: mood === 'ok'}" 
+            @click="changeMood('ok')"
+                aria-label="Ok humør" >
             <div></div>
         </li>
-        <li class="good active">
+        <li :class="{good: true, active: mood === 'good'}" 
+            @click="changeMood('good')"
+            aria-label="Godt humør" >
             <div>
                 <svg class="eye left">
                     <use xlink:href="#eye"></use>
@@ -51,7 +59,9 @@
                 </svg>
             </div>
         </li>
-        <li class="happy">
+        <li :class="{happy: true, active: mood === 'happy'}" 
+            @click="changeMood('happy')"
+                aria-label="Meget godt humør" >
             <div>
                 <svg class="eye left">
                     <use xlink:href="#eye"></use>
@@ -66,22 +76,29 @@
 
 <script>
 
-document.querySelectorAll('.feedback li').forEach(entry => entry.addEventListener('click', e => {
-    if(!entry.classList.contains('active')) {
-        document.querySelector('.feedback li.active').classList.remove('active');
-        entry.classList.add('active');
-    }
-    e.preventDefault();
-}));
-
 export default {
     props: {
-        
+        mood: {
+            type: String,
+            required: true,
+        },
+        name: {
+            type: String,
+            default: "mood",
+        }
+    },
+    emits: ["mood-change"],
+    methods: {
+        changeMood(mood){
+            this.$emit("mood-change", mood, this.name);
+        }
     }
 }
 </script>
 
-<style lang="sass" rel='stylesheet/scss' scoped>
+<style lang="scss" scoped>
+
+
 .feedback {
     --normal: #ECEAF3;
     --normal-shadow: #D9D8E3;
