@@ -1,5 +1,7 @@
 
 <template>
+    <LoadingAnimation :enable="loading" />
+
     <h2>Log in</h2>
     <form @submit.prevent="submitLogin">
         <BaseInput label="Gmail:"
@@ -21,11 +23,13 @@
 <script>
 import BaseInput from '../../components/UI/BaseInput.vue';
 import GreenButton from '../../components/UI/GreenButton.vue';
+import LoadingAnimation from '../../components/animated/LoadingAnimation.vue';
 
 export default {
     components: {
         BaseInput,
         GreenButton,
+        LoadingAnimation,
     },
     inject: ["logInUser"],
     data() {
@@ -38,17 +42,22 @@ export default {
                 "",
                 "",
             ],
+            loading: false,
         };
     },
     methods: {
         submitLogin() {
 
             let valid = true;
+            this.loading = true;
 
             fetch("https://mood-app-storage-default-rtdb.firebaseio.com/users.json")
                     .then(response => {
                         if (response.ok) {
                             return response.json();
+                        }
+                        else{
+                            this.loading = false;
                         }
                     }).then(data => {
 
@@ -109,6 +118,7 @@ export default {
                                 return correct;
                             });
                         }
+                        this.loading = false;
 
                         if (!valid) {
                             return;

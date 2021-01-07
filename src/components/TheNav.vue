@@ -53,6 +53,11 @@ export default {
         background-color:#e7e7e7;
         color: darkgreen;
     }
+
+    .router-link-active {
+        padding-bottom: 0.3rem;
+        border-bottom: 0.2rem solid #e7e7e7;
+    }
     
     @media screen and (min-width: 250px) {
         nav {

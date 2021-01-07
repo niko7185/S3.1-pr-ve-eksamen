@@ -1,6 +1,8 @@
 
 <template>
-    <form @submit.prevent="submitActivity">
+    <LoadingAnimation :enable="loading" />
+    <h2 v-if="!activity" style="text-align: center;">Denne side findes ikke. <router-link to="/home">Gå tilbage</router-link></h2>
+    <form @submit.prevent="submitActivity" v-else>
         <BaseInput label="Hvordan har du det?"
                    name="title"
                    :baseValue="activity.title"
@@ -27,12 +29,14 @@
 import GreenButton from '../../components/UI/GreenButton.vue';
 import BaseInput from '../../components/UI/BaseInput.vue';
 import EmojiInput from '../../components/UI/EmojiInput.vue';
+import LoadingAnimation from '../../components/animated/LoadingAnimation.vue';
 
 export default {
     components: {
         GreenButton,
         BaseInput,
         EmojiInput,
+        LoadingAnimation,
     },
     inject: ["logInUser"],
     data() {
@@ -43,7 +47,8 @@ export default {
                 title: "",
                 description: "",
                 mood: "ok",
-            }
+            },
+            loading: false,
         };
     },
     methods: {
@@ -67,11 +72,13 @@ export default {
             if (!valid) {
                 return;
             }
+            this.loading = true;
 
             this.activity.time = Date.now();
             
             if (this.activity.id) {
                 const index = this.user.activities.findIndex(a => a.id === this.activity.id)
+                
                 this.user.activities[index] = this.activity;
             } else {
                 if (!this.user.activities.length) {
@@ -80,7 +87,8 @@ export default {
                     
                 } else {
                     const highest = this.user.activities.reduce((acc, value) => {
-                        return acc < value ? value : acc;
+
+                        return acc.id < value.id ? value : acc;
                     });
                     
                     this.activity.id = highest.id + 1;
@@ -97,7 +105,8 @@ export default {
                             body: JSON.stringify({activities: this.user.activities}),
                         });
 
-            localStorage.setItem("user", JSON.stringify(this.user));
+            //localStorage.setItem("user", JSON.stringify(this.user));
+            this.loading = false;
             this.logInUser(this.user);    
             this.$router.push("/home");
 

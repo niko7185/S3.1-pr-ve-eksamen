@@ -142,7 +142,6 @@ export default {
   }
 
   .title {
-    font-weight: bold;
     margin: 5px 0;
   }
 
@@ -158,8 +157,12 @@ export default {
     line-height: 1.5;
   }
 
-  .ranking {
+  .ranking, .title {
+    font-weight: bold;
     text-align: left;
+  }
+
+  .ranking {
     margin: 0px;
   }
 

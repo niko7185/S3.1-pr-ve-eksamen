@@ -31,7 +31,7 @@ export default {
     };
   },
   created() {
-    this.user = localStorage.getItem('user');
+    this.user = JSON.parse(localStorage.getItem('user'));
     
   },
 }

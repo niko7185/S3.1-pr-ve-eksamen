@@ -1,5 +1,7 @@
 
 <template>
+    <LoadingAnimation :enable="loading" />
+
     <h2>Opret en ny bruger</h2>
     <form @submit.prevent="submitAccount">
         <BaseInput label="Bruger navn:"
@@ -26,11 +28,13 @@
 <script>
 import BaseInput from '../../components/UI/BaseInput.vue';
 import GreenButton from '../../components/UI/GreenButton.vue';
+import LoadingAnimation from '../../components/animated/LoadingAnimation.vue';
 
 export default {
     components: {
         BaseInput,
         GreenButton,
+        LoadingAnimation,
     },
     inject: ["logInUser"],
     data() {
@@ -45,6 +49,7 @@ export default {
                 "",
                 "",
             ],
+            loading: false,
         };
     },
     methods: {
@@ -69,6 +74,8 @@ export default {
                 return;
             }
 
+            this.loading = true;
+
             const newUser = JSON.stringify({
                     userName: this.account.name,
                     password: this.account.password,
@@ -88,6 +95,9 @@ export default {
                 if (response.ok) {
                     return response.json();
                 }
+                else{
+                    this.loading = false;
+                }
             }).then(data => {
 
                 const users = Object.keys(data);
@@ -99,7 +109,9 @@ export default {
                     createdUser.activities = [];
                 }
                 
-                localStorage.setItem("user", JSON.stringify(createdUser));
+                //localStorage.setItem("user", JSON.stringify(createdUser));
+                
+                this.loading = false;
                 this.logInUser(createdUser);
                 this.$router.push("/home");
             });
@@ -110,6 +122,11 @@ export default {
         getInput(value, name) {
             this.account[name] = value;
         }
-    }
+    },
+    beforeRouteEnter(_, _2, next) {
+        const user = localStorage.getItem("user");
+
+        next(!user);
+    },
 }
 </script>
